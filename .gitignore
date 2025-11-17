@@ -1,0 +1,22 @@
+# IntelliJ IDEA
+.idea/
+
+# Maven
+target/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment and secrets
+.env
+application.properties
+application.yml
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*~
