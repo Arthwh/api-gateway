@@ -21,6 +21,9 @@ public class GatewayConfig {
                 .route("servico-usuarios", r -> r.path("/users/**", "/auth/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://servico-usuarios"))
+                .route("servico-eventos", r -> r.path("/events/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://servico-eventos"))
                 .build();
     }
 

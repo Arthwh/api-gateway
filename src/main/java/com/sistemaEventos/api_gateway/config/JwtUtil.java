@@ -46,6 +46,7 @@ public class JwtUtil {
             this.getAllClaimsFromToken(token);
             return false;
         } catch (Exception e) {
+            System.out.println(e);
             // Se der erro (expirado, assinatura errada), ele é inválido
             return true;
         }
