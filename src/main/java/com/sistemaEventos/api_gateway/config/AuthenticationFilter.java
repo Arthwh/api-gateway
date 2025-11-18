@@ -35,7 +35,8 @@ public class AuthenticationFilter implements GatewayFilter {
                 return this.onError(exchange, HttpStatus.UNAUTHORIZED);
             }
 
-            final String token = this.getAuthHeader(request);
+            final String token = this.getAuthHeader(request).trim();
+            System.out.println(token);
 
             if (jwtUtil.isInvalid(token)) {
                 return this.onError(exchange, HttpStatus.FORBIDDEN);
@@ -54,7 +55,11 @@ public class AuthenticationFilter implements GatewayFilter {
     }
 
     private String getAuthHeader(ServerHttpRequest request) {
-        return request.getHeaders().getOrEmpty("Authorization").getFirst();
+        String authHeader = request.getHeaders().getOrEmpty("Authorization").getFirst();
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7);
+        }
+        return authHeader;
     }
 
     private boolean isAuthMissing(ServerHttpRequest request) {
