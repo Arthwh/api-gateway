@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -29,6 +30,14 @@ public class AuthenticationFilter implements GatewayFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+
+        System.out.println(request);
+
+        if (request.getMethod() == HttpMethod.OPTIONS) {
+            System.out.println("CORS Preflight (OPTIONS) request passed through Authentication Filter.");
+            // Passa para o próximo filtro, que será o CorsConfig.java
+            return chain.filter(exchange);
+        }
 
         if (routerValidator.isSecured.test(request)) {
             if (this.isAuthMissing(request)) {
