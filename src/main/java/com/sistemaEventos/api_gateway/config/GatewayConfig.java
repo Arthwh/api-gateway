@@ -18,6 +18,7 @@ public class GatewayConfig {
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes()
+                // --- ROTAS DE NEGÓCIO ---
                 .route("servico-usuarios", r -> r.path("/users/**", "/auth/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://servico-usuarios"))
@@ -27,7 +28,24 @@ public class GatewayConfig {
                 .route("servico-inscricoes", r -> r.path("/registrations/**", "/api/certificates/**")
                         .filters(f -> f.filter(filter))
                         .uri("lb://servico-inscricoes"))
+                .route("servico-notificacoes", r -> r.path("/api/notifications/**")
+                        .filters(f -> f.filter(filter))
+                        .uri("lb://servico-notificacoes"))
+
+                // --- ROTAS DO SWAGGER (Abertas) ---
+
+                .route("docs-usuarios", r -> r.path("/v3/api-docs/servico-usuarios")
+                        .filters(f -> f.rewritePath("/v3/api-docs/servico-usuarios", "/v3/api-docs"))
+                        .uri("lb://servico-usuarios"))
+
+                .route("docs-eventos", r -> r.path("/v3/api-docs/servico-eventos")
+                        .filters(f -> f.rewritePath("/v3/api-docs/servico-eventos", "/v3/api-docs"))
+                        .uri("lb://servico-eventos"))
+
+                .route("docs-inscricoes", r -> r.path("/v3/api-docs/servico-inscricoes")
+                        .filters(f -> f.rewritePath("/v3/api-docs/servico-inscricoes", "/v3/api-docs"))
+                        .uri("lb://servico-inscricoes"))
+
                 .build();
     }
-
 }

@@ -1,5 +1,6 @@
 package com.sistemaEventos.api_gateway.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -12,15 +13,20 @@ import java.util.List;
 
 @Configuration
 public class CorsConfig {
+    //Lê a variável do application.yml
+    @Value("${cors.allowed-origins}")
+    private String allowedOrigins;
+
     @Bean
     public CorsWebFilter corsWebFilter() {
 
         CorsConfiguration corsConfig = new CorsConfiguration();
 
         // ORIGENS PERMITIDAS
-        corsConfig.setAllowedOrigins(List.of(
-                "http://localhost:5173"
-        ));
+        if (allowedOrigins != null && !allowedOrigins.isEmpty()) {
+            // Transforma a string "site1,site2" em uma lista e configura
+            corsConfig.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
+        }
 
         // MÉTODOS PERMITIDOS
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"));
