@@ -46,6 +46,11 @@ public class GatewayConfig {
                         .filters(f -> f.rewritePath("/v3/api-docs/servico-inscricoes", "/v3/api-docs"))
                         .uri("lb://servico-inscricoes"))
 
+                .route("docs-notificacoes", r -> r.path("/v3/api-docs/servico-notificacoes")
+                        // AQUI ESTÁ O TRUQUE: O Java chama /v3/api-docs..., mas o Gateway traduz para /openapi.json
+                        .filters(f -> f.rewritePath("/v3/api-docs/servico-notificacoes", "/openapi.json"))
+                        .uri("lb://servico-notificacoes"))
+
                 .build();
     }
 }
